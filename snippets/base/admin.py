@@ -129,6 +129,9 @@ class SnippetAdmin(BaseSnippetAdmin):
         ('Content', {
             'fields': ('template', 'data'),
         }),
+        ('Version', {
+            'fields': ('version',),
+        }),
         ('Publish Duration', {
             'description': ('When will this snippet be available? (Optional)'
                             '<br>Publish times are in UTC. '

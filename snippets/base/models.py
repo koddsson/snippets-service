@@ -191,6 +191,8 @@ class Snippet(CachingMixin, models.Model):
     template = models.ForeignKey(SnippetTemplate)
     data = models.TextField(default='{}', validators=[validate_xml])
 
+    version = models.TextField()
+
     priority = models.IntegerField(default=0, blank=True)
     disabled = models.BooleanField(default=True)
 

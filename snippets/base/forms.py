@@ -124,12 +124,24 @@ class BaseSnippetAdminForm(forms.ModelForm):
         self.fields['locales'].initial = [l.locale for l in locales]
 
 
+class VersionSelect(forms.Select):
+    def render(self, *args, **kwargs):
+        from product_details import product_details
+        from product_details.version_compare import version_list
+        versions = version_list(
+            product_details.firefox_history_development_releases)
+        self.variables_for = versions
+
+        return super(TemplateSelect, self).render(*args, **kwargs)
+
+
 class SnippetAdminForm(BaseSnippetAdminForm):
     class Meta:
         model = Snippet
         widgets = {
             'template': TemplateSelect,
             'data': TemplateDataWidget('template'),
+            'version': VersionSelect,
         }
 
 
