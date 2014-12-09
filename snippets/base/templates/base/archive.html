@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Snippets archives{% endblock %}
+{% block navbar_title %}Snippets archives{% endblock %}
+
+{% block snippet_index_url %}
+<a href="{{ url('admin:base_archivedsnippet_changelist') }}">Edit archived snippets</a>
+{% endblock %}
+
+{% block navbar_url %}{{ url('base.archive') }}{% endblock %}
+
+{% block content %}
+  <div class="hero-unit">
+    <h1>Snippet archives</h1>
+    <p>Hello there and welcome to the Mozilla snippets archives!</p>
+  </div>
+  <div class="row">
+  {% for snippet in snippets %}
+  <div class="span4">
+    <!-- TODO: Move placeholder logic up a layer -->
+    {% if snippet.screenshot %}
+    <a href="{{ snippet.id }}"><img src="{{ snippet.screenshot.url }}" alt="{{ snippet.name }}" /></a>
+    {% else %}
+    <a href="{{ snippet.id }}"><img src="http://www.placehold.it/350x150" alt="{{ snippet.name }}"/></a>
+    {% endif %}
+    <h5><a href="#">{{ snippet.name }}</a></h5>
+    {{ snippet.description }}
+  </div>
+  {% endfor %}
+  </div>
+{% endblock %}

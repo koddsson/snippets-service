@@ -364,3 +364,14 @@ class UploadedFile(models.Model):
             models.Q(data__contains=self.file.url) |
             models.Q(template__code__contains=self.file.url)
         )
+
+
+class ArchivedSnippet(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.CharField(max_length=255)
+    screenshot = models.FileField(upload_to='screenshots/')
+    visible = models.BooleanField(default=False)
+    html = models.TextField()
+
+    def render(self):
+        return Markup(self.html)

@@ -18,7 +18,8 @@ import django_filters
 
 from snippets.base.decorators import access_control
 from snippets.base.encoders import SnippetEncoder
-from snippets.base.models import Client, JSONSnippet, Snippet, SnippetTemplate
+from snippets.base.models import (
+    Client, JSONSnippet, Snippet, SnippetTemplate, ArchivedSnippet)
 from snippets.base.util import get_object_or_none
 
 
@@ -80,6 +81,19 @@ class JSONSnippetIndexView(IndexView):
         self.snippets = JSONSnippet.objects.filter(disabled=False)
         self.snippetsfilter = JSONSnippetFilter(request.GET, self.snippets)
         return self.render(request, *args, **kwargs)
+
+
+class SnippetsArchive(TemplateView):
+    def get(self, request, snippet_id, *args, **kwargs):
+        if snippet_id:
+            template_name = 'base/preview.html'
+            data = {
+                'snippet': get_object_or_404(ArchivedSnippet, id=snippet_id)
+            }
+        else:
+            template_name = 'base/archive.html'
+            data = {'snippets': ArchivedSnippet.objects.filter(visible=True)}
+        return render(request, template_name, data)
 
 
 @cache_control(public=True, max_age=HTTP_MAX_AGE)

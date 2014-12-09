@@ -14,6 +14,15 @@ from snippets.base import LANGUAGE_VALUES, forms, models
 MATCH_LOCALE_REGEX = re.compile('(\w+(?:-\w+)*)')
 
 
+def release_snippets_action(modeladmin, request, queryset):
+    """ Releases the selected snippets to the snippets showcase. """
+    for snippet in queryset:
+        models.ArchivedSnippet.objects.create(
+            name=snippet.name, html=snippet.render())
+release_snippets_action.short_description = (
+    "Release selected snippets to snippets showcase.")
+
+
 @transaction.commit_on_success
 def cmr_to_locales_action(modeladmin, request, queryset):
     """Convert Locale ClientMatchRules to the new Locale format.
@@ -158,7 +167,7 @@ class SnippetAdmin(BaseSnippetAdmin):
         }),
     )
 
-    actions = (cmr_to_locales_action,)
+    actions = [cmr_to_locales_action, release_snippets_action]
 
     class Media:
         css = {
@@ -288,8 +297,13 @@ class UploadedFileAdmin(admin.ModelAdmin):
     snippets.allow_tags = True
 
 
+class ArchivedSnippetAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'visible', 'screenshot')
+    list_editable = ('visible',)
+
 admin.site.register(models.Snippet, SnippetAdmin)
 admin.site.register(models.ClientMatchRule, ClientMatchRuleAdmin)
 admin.site.register(models.SnippetTemplate, SnippetTemplateAdmin)
 admin.site.register(models.JSONSnippet, JSONSnippetAdmin)
 admin.site.register(models.UploadedFile, UploadedFileAdmin)
+admin.site.register(models.ArchivedSnippet, ArchivedSnippetAdmin)

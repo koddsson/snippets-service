@@ -18,5 +18,8 @@ urlpatterns = patterns(
         views.fetch_json_snippets, name='base.fetch_json_snippets'),
     url(r'^preview/$', views.preview_snippet, name='base.preview'),
     url(r'^show/(?P<snippet_id>\d+)/$', views.show_snippet, name='base.show'),
-    url(r'^json-snippets/', views.JSONSnippetIndexView.as_view(), name='base.index_json'),
+    url(r'^json-snippets/', views.JSONSnippetIndexView.as_view(),
+        name='base.index_json'),
+    url(r'^archive/(?P<snippet_id>\d+)?$', views.SnippetsArchive.as_view(),
+        name='base.archive'),
 )
